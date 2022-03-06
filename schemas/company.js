@@ -18,4 +18,4 @@ const CompanySchema = mongoose.Schema({
 
 })
 
-module.exports = mongoose.model('Post', CompanySchema);
+module.exports = mongoose.model('Company', CompanySchema);

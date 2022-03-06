@@ -47,4 +47,4 @@ const AssetSchema = mongoose.Schema({
     }
 })
 
-module.exports = mongoose.model('Post', AssetSchema);
+module.exports = mongoose.model('Asset', AssetSchema);

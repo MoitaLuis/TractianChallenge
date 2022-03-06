@@ -22,4 +22,4 @@ const UnitSchema = mongoose.Schema({
     },
 })
 
-module.exports = mongoose.model('Post', UnitSchema);
+module.exports = mongoose.model('Unit', UnitSchema);
