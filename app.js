@@ -8,6 +8,39 @@ require('dotenv/config');
 
 app.use(bodyParser.json());
 
+/* 
+requests:
+
+getAllCompanies
+getCompaniesUnit1
+getCompaniesUnit2
+postCompanyUnit
+updateCompanyUnit
+deleteCompanyUnit
+
+getAllUnits
+getUnitsUnit1
+getUnitsUnit2
+postUnitUnit
+updateUnitUnit
+deleteUnitUnit
+
+getAllAssets
+getAssetsUnit1
+getAssetsUnit2
+postAssetUnit
+updateAssetUnit
+deleteAssetUnit
+
+getAllUsers
+getUsersUnit1
+getUsersUnit2
+postUserUnit
+updateUserUnit
+deleteUserUnit
+
+*/
+
 //create read update delete
 app.get('/', (req, res) => {
     res.send('oi');
