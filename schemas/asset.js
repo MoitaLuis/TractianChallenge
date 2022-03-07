@@ -27,7 +27,7 @@ const AssetSchema = mongoose.Schema({
     },
 
     health_level: {
-        type: int,
+        type: Number,
         required: true
     },
 
@@ -37,7 +37,7 @@ const AssetSchema = mongoose.Schema({
     },
 
     price: {
-        type: int,
+        type: Number,
         required: false
     },
 

@@ -4,45 +4,15 @@ const mongoose = require('mongoose');
 const Post = require('./schemas/post');
 const bodyParser = require('body-parser');
 const Company = require('./schemas/company');
+const Asset = require('./schemas/asset');
+const User = require('./schemas/user');
+const Unit = require('./schemas/unit');
 
 require('dotenv/config');
 
 app.use(bodyParser.json());
 
-/* 
-requests:
-
-O    getAllCompanies
-O    postCompanyUnit
-O    updateCompanyUnit
-O    deleteCompanyUnit
-
-X    getAllUnits
-X    postUnitUnit
-X    updateUnit
-X    deleteUnit
-
-X    getAllAssets
-X    getAssetsUnit1
-X    getAssetsUnit2
-X    postAssetUnit
-X    updateAssetUnit
-X    deleteAssetUnit
-
-X    getAllUsers
-X    getUsersUnit1
-X    getUsersUnit2
-X    postUserUnit
-X    updateUserUnit
-X    deleteUserUnit
-
-*/
-
-app.get('/', (req, res) => {
-    res.send('oi');
-});
-
-
+//GET
 app.get('/companies', (req, res) => {
     Company.find()
         .then(companies => {
@@ -54,7 +24,44 @@ app.get('/companies', (req, res) => {
             });
         });
 });
+
+app.get('/units', (req, res) => {
+    Unit.find()
+        .then(units => {
+            res.json(units);
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            });
+        });
+});
+
+app.get('/assets', (req, res) => {
+    Asset.find()
+        .then(assets => {
+            res.json(assets);
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            });
+        });
+});
+
+app.get('/users', (req, res) => {
+    User.find()
+        .then(users => {
+            res.json(users);
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            });
+        });
+});
     
+//POST
 app.post('/companies', (req, res) => {
     const company = new Company({
         _id: new mongoose.Types.ObjectId(),
@@ -76,6 +83,77 @@ app.post('/companies', (req, res) => {
         });
 });
 
+app.post('/units', (req, res) => {
+    const unit = new Unit({
+        _id: new mongoose.Types.ObjectId(),
+        name: req.body.name,
+        adress: req.body.adress,
+        phone: req.body.phone,
+        companyId: req.body.companyId
+    });
+    unit.save()
+        .then(result => {
+            res.status(201).json({
+                message: 'Unit created',
+                createdUnit: unit
+            });
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            });
+        });
+});
+
+app.post('/assets', (req, res) => {
+    const asset = new Asset({
+        _id: new mongoose.Types.ObjectId(),
+        name: req.body.name,
+        description: req.body.description,
+        model: req.body.model,
+        owner: req.body.owner,
+        status: req.body.status,
+        health_level: req.body.health_level,
+        image: req.body.image,
+        price: req.body.price,
+        unitId: req.body.unitId
+    });
+    asset.save()
+        .then(result => {
+            res.status(201).json({
+                message: 'Asset created',
+                createdAsset: asset
+            });
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            });
+        });
+});
+
+app.post('/users', (req, res) => {
+    const user = new User({
+        _id: new mongoose.Types.ObjectId(),
+        name: req.body.name,
+        phone: req.body.phone,
+        email: req.body.email
+    });
+    user.save()
+        .then(result => {
+            res.status(201).json({
+                message: 'User created',
+                createdUser: user
+            });
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            });
+        });
+});
+
+//PUT
 app.put('/companies/:companyId', (req, res) => {
     Company.findByIdAndUpdate(req.params.companyId, {
         $set: req.body
@@ -92,6 +170,55 @@ app.put('/companies/:companyId', (req, res) => {
         });
 });
 
+app.put('/units/:unitId', (req, res) => {
+    Unit.findByIdAndUpdate(req.params.unitId, {
+        $set: req.body
+    }, {
+        new: true
+    })
+        .then(unit => {
+            res.json(unit);
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            });
+        });
+});
+
+app.put('/assets/:assetId', (req, res) => {
+    Asset.findByIdAndUpdate(req.params.assetId, {
+        $set: req.body
+    }, {
+        new: true
+    })
+        .then(asset => {
+            res.json(asset);
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            });
+        });
+});
+
+app.put('/users/:userId', (req, res) => {
+    User.findByIdAndUpdate(req.params.userId, {
+        $set: req.body
+    }, {
+        new: true
+    })
+        .then(user => {
+            res.json(user);
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            });
+        });
+});
+
+//DELETE
 app.delete('/companies/:companyId', (req, res) => {
     Company.findByIdAndRemove(req.params.companyId)
         .then(company => {
@@ -107,34 +234,56 @@ app.delete('/companies/:companyId', (req, res) => {
         });
 });
 
-
-
-
-
-
-/*teste
-app.post('/', async (req, res) => {
-    const post = new Post({
-        title: req.body.title,
-        content: req.body.content
-    });
-    try{
-        const result = await post.save();
-        post.save();
-        res.json(result);
-
-    }catch(err){
-        res.json({message: err});
-    }
-
+app.delete('/units/:unitId', (req, res) => {
+    Unit.findByIdAndRemove(req.params.unitId)
+        .then(unit => {
+            res.json({
+                message: 'Unit deleted',
+                deletedUnit: unit
+            });
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            });
+        });
 });
-*/
+
+
+app.delete('/assets/:assetId', (req, res) => {
+    Asset.findByIdAndRemove(req.params.assetId)
+        .then(asset => {
+            res.json({
+                message: 'Asset deleted',
+                deletedAsset: asset
+            });
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            });
+        });
+});
+
+app.delete('/users/:userId', (req, res) => {
+    User.findByIdAndRemove(req.params.userId)
+        .then(user => {
+            res.json({
+                message: 'User deleted',
+                deletedUser: user
+            });
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            });
+        });
+});
+
+//PORT
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+    console.log('Server started on port ' + port);
+});
 
 mongoose.connect(process.env.DB_CONNECTION, () => console.log("Connected to database"));
-
-
-//listen
-app.listen(3000, () => {
-    console.log('Server started on port 3000');
-});
-
