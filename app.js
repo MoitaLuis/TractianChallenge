@@ -61,6 +61,71 @@ app.get('/users', (req, res) => {
         });
 });
     
+//GET by ID
+app.get('/companies/:id', (req, res) => {
+    Company.findById(req.params.id)
+        .then(company => {
+            if (company) {
+                res.json(company);
+            } else {
+                res.status(404).json({ message: 'Company not found' });
+            }
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            });
+        });
+});
+
+app.get('/units/:id', (req, res) => {
+    Unit.findById(req.params.id)
+        .then(unit => {
+            if (unit) {
+                res.json(unit);
+            } else {
+                res.status(404).json({ message: 'Unit not found' });
+            }
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            });
+        });
+});
+
+app.get('/assets/:id', (req, res) => {
+    Asset.findById(req.params.id)
+        .then(asset => {
+            if (asset) {
+                res.json(asset);
+            } else {
+                res.status(404).json({ message: 'Asset not found' });
+            }
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            });
+        });
+});
+
+app.get('/users/:id', (req, res) => {
+    User.findById(req.params.id)
+        .then(user => {
+            if (user) {
+                res.json(user);
+            } else {
+                res.status(404).json({ message: 'User not found' });
+            }
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            });
+        });
+});
+
 //POST
 app.post('/companies', (req, res) => {
     const company = new Company({
