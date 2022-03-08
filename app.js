@@ -7,6 +7,18 @@ const Company = require('./schemas/company');
 const Asset = require('./schemas/asset');
 const User = require('./schemas/user');
 const Unit = require('./schemas/unit');
+const multer = require('multer');
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './uploads/')
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname)
+    }
+})
+const upload = multer({ storage: storage})
+const fs = require('fs');
+const path = require('path');
 
 require('dotenv/config');
 
@@ -170,7 +182,7 @@ app.post('/units', (req, res) => {
         });
 });
 
-app.post('/assets', (req, res) => {
+app.post('/assets', upload.single('image') , (req, res) => {
     const asset = new Asset({
         _id: new mongoose.Types.ObjectId(),
         name: req.body.name,
@@ -179,7 +191,10 @@ app.post('/assets', (req, res) => {
         owner: req.body.owner,
         status: req.body.status,
         health_level: req.body.health_level,
-        image: req.body.image,
+        image: {
+            data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
+            contentType: 'image/png'
+        },
         price: req.body.price,
         unitId: req.body.unitId
     });
