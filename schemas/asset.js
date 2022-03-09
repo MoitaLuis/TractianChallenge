@@ -23,22 +23,20 @@ const AssetSchema = mongoose.Schema({
 
     status:{
         type: String,
-        required: true
+        required: true,
+        enum: ['Running', 'Alerting', 'Stopped']
     },
 
     health_level: {
         type: Number,
-        required: true
+        required: true,
+        min: [0, 'Invalid health level'],
+        max: [100, 'Invalid health level']
     },
 
     image: {
         data: Buffer,
         contentType: String
-    },
-
-    price: {
-        type: Number,
-        required: false
     },
 
     unitId: {

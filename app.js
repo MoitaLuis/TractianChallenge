@@ -19,8 +19,9 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage})
 const fs = require('fs');
 const path = require('path');
-
 require('dotenv/config');
+
+
 
 app.use(bodyParser.json());
 
@@ -73,23 +74,7 @@ app.get('/users', (req, res) => {
         });
 });
     
-//GET by ID
-app.get('/companies/:id', (req, res) => {
-    Company.findById(req.params.id)
-        .then(company => {
-            if (company) {
-                res.json(company);
-            } else {
-                res.status(404).json({ message: 'Company not found' });
-            }
-        })
-        .catch(err => {
-            res.status(500).json({
-                error: err
-            });
-        });
-});
-
+//unit by id
 app.get('/units/:id', (req, res) => {
     Unit.findById(req.params.id)
         .then(unit => {
@@ -106,8 +91,26 @@ app.get('/units/:id', (req, res) => {
         });
 });
 
+//unit by company id
+app.get('/units/company/:id', (req, res) => {
+    Unit.find({companyId: req.params.id})
+        .then(unit => {
+            if (unit) {
+                res.json(unit);
+            } else {
+                res.status(404).json({ message: 'Unit not found' });
+            }
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            });
+        });
+});
+
+//assets by unit id
 app.get('/assets/:id', (req, res) => {
-    Asset.findById(req.params.id)
+    Asset.find({unit: req.params.id})
         .then(asset => {
             if (asset) {
                 res.json(asset);
@@ -122,8 +125,9 @@ app.get('/assets/:id', (req, res) => {
         });
 });
 
+//user by company id
 app.get('/users/:id', (req, res) => {
-    User.findById(req.params.id)
+    User.find({companyId: req.params.id})
         .then(user => {
             if (user) {
                 res.json(user);
@@ -195,9 +199,9 @@ app.post('/assets', upload.single('image') , (req, res) => {
             data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
             contentType: 'image/png'
         },
-        price: req.body.price,
         unitId: req.body.unitId
     });
+    asset.validateSync()
     asset.save()
         .then(result => {
             res.status(201).json({
