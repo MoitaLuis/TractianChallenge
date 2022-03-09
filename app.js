@@ -26,6 +26,10 @@ require('dotenv/config');
 app.use(bodyParser.json());
 
 //GET
+app.get('/', (req, res) => {
+    res.send('API para desafio backend da empresa Tractian. Utilize este endereço juntamente com o endpoint desejado para acessar os CRUDs!');
+});
+
 app.get('/companies', (req, res) => {
     Company.find()
         .then(companies => {
