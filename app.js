@@ -221,7 +221,8 @@ app.post('/users', (req, res) => {
         _id: new mongoose.Types.ObjectId(),
         name: req.body.name,
         phone: req.body.phone,
-        email: req.body.email
+        email: req.body.email,
+        companyId: req.body.companyId
     });
     user.save()
         .then(result => {
