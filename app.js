@@ -110,7 +110,7 @@ app.get('/units/company/:id', (req, res) => {
 
 //assets by unit id
 app.get('/assets/:id', (req, res) => {
-    Asset.find({unit: req.params.id})
+    Asset.find({unitId: req.params.id})
         .then(asset => {
             if (asset) {
                 res.json(asset);
